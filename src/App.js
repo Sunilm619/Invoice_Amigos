@@ -1,9 +1,8 @@
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Use minified version
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from 'react';
 
 function App() {
-  // State for form data
   const [itemDescription, setItemDescription] = useState('');
   const [quantity, setQuantity] = useState('');
   const [rate, setRate] = useState('');
@@ -11,29 +10,29 @@ function App() {
   const [cgst, setCgst] = useState(0); // CGST per item
   const [amount, setAmount] = useState(0); // Total amount for each item
 
-  // State to hold the list of items
+
   const [items, setItems] = useState([]);
 
-  // State for totals
+
   const [subTotal, setSubTotal] = useState(0);
   const [totalSgst, setTotalSgst] = useState(0);
   const [totalCgst, setTotalCgst] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
 
-  // Recalculate SGST, CGST, and Amount whenever rate or quantity changes
+
   useEffect(() => {
     if (rate && quantity) {
       calculateAmount();
     }
   }, [rate, quantity]);
 
-  // Calculate SGST, CGST, and Total Amount for an item
-  const calculateAmount = () => {
-    const gstRate = 18; // Assuming 18% GST in total
-    const halfGst = gstRate / 2; // Split equally for CGST and SGST
 
-    const calculatedSgst = (parseFloat(rate) * halfGst) / 100; // 9% SGST
-    const calculatedCgst = (parseFloat(rate) * halfGst) / 100; // 9% CGST
+  const calculateAmount = () => {
+    const gstRate = 18;
+    const halfGst = gstRate / 2;
+
+    const calculatedSgst = (parseFloat(rate) * halfGst) / 100;
+    const calculatedCgst = (parseFloat(rate) * halfGst) / 100;
     const totalAmount = (parseFloat(rate) * parseFloat(quantity)) + (calculatedSgst + calculatedCgst) * quantity;
 
     setSgst((calculatedSgst * quantity).toFixed(2));
@@ -41,7 +40,6 @@ function App() {
     setAmount(totalAmount.toFixed(2));
   };
 
-  // Add new item to the list
   const handleAddItem = () => {
     if (itemDescription && quantity && rate) {
       const newItem = {
@@ -56,7 +54,6 @@ function App() {
       // Add the new item to the items array
       setItems([...items, newItem]);
 
-      // Clear input fields after adding the item
       setItemDescription('');
       setQuantity('');
       setRate('');
@@ -66,7 +63,6 @@ function App() {
     }
   };
 
-  // Recalculate totals when items change
   useEffect(() => {
     const newSubTotal = items.reduce((total, item) => total + item.quantity * item.rate, 0);
     const newTotalSgst = items.reduce((total, item) => total + item.sgst, 0);
@@ -181,7 +177,6 @@ function App() {
           </div>
         </div>
 
-        {/* Dynamically render added items */}
         {items.length > 0 && items.map((item, index) => (
           <div className='row flex items-center' key={index}>
             <div className='col-md-7'>
